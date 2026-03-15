@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geek Room — Where Innovation Meets Code</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Home-specific styles ── */
+    .section-center { text-align: center; }
+    .section-center .section-sub { margin-left: auto; margin-right: auto; }
+
+    /* About section */
+    .about-section { background: var(--bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .about-code-block {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--glass-b);
+      border-radius: 14px; overflow: hidden;
+      font-family: var(--font-body); font-size: 13px;
+    }
+    .code-bar {
+      background: rgba(255,255,255,0.04);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--glass-b);
+    }
+    .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-dot.r { background: #ff5f57; }
+    .code-dot.y { background: #ffbd2e; }
+    .code-dot.g { background: #28c941; }
+    .code-title { font-size: 11px; color: var(--text-dim); margin-left: 8px; letter-spacing: 0.1em; }
+    .code-body { padding: 24px 20px; line-height: 1.9; }
+    .c-kw  { color: #c792ea; }
+    .c-fn  { color: #82aaff; }
+    .c-str { color: #c3e88d; }
+    .c-num { color: #f78c6c; }
+    .c-cm  { color: #546e7a; font-style: italic; }
+    .c-neon{ color: var(--neon); }
+    .about-text h2 { font-family: var(--font-head); font-size: clamp(1.5rem,3vw,2.4rem); font-weight: 900; color: #fff; margin-bottom: 20px; line-height: 1.15; }
+    .about-text p  { font-size: 0.9rem; color: var(--text-dim); line-height: 1.9; margin-bottom: 16px; }
+    .about-list { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+    .about-list-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.87rem; color: var(--text);
+    }
+    .about-list-item::before {
+      content: '▶'; color: var(--neon); font-size: 10px; flex-shrink: 0;
+    }
+
+    /* Hackathon / Workshop / Talks cards */
+    .pillars-section { background: linear-gradient(180deg, var(--bg2), var(--bg)); }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .pillar-card {
+      border-radius: var(--radius); overflow: hidden;
+      position: relative; cursor: none;
+      min-height: 260px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      border: 1px solid var(--glass-b);
+      transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .pillar-bg {
+      position: absolute; inset: 0; z-index: 0;
+      transition: transform 0.5s ease;
+    }
+    .pillar-card:hover .pillar-bg { transform: scale(1.06); }
+    .pillar-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to top, rgba(3,8,15,0.95) 0%, rgba(3,8,15,0.4) 60%, transparent 100%);
+    }
+    .pillar-content {
+      position: relative; z-index: 2;
+      padding: 24px;
+    }
+    .pillar-icon { font-size: 2rem; margin-bottom: 12px; }
+    .pillar-title {
+      font-family: var(--font-head); font-size: 1rem;
+      font-weight: 800; color: #fff; margin-bottom: 8px;
+    }
+    .pillar-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+    .pillar-card:hover {
+      border-color: rgba(0,255,231,0.35);
+      box-shadow: 0 16px 60px rgba(0,0,0,0.5);
+      transform: translateY(-5px);
+    }
+    .pillar-card:nth-child(1) .pillar-bg { background: linear-gradient(135deg, #0a1628 0%, #0d2545 100%); }
+    .pillar-card:nth-child(2) .pillar-bg { background: linear-gradient(135deg, #0a0f1e 0%, #1a0a2e 100%); }
+    .pillar-card:nth-child(3) .pillar-bg { background: linear-gradient(135deg, #0a1a14 0%, #0d2e20 100%); }
+    .pillar-card:nth-child(4) .pillar-bg { background: linear-gradient(135deg, #1a0a10 0%, #2e0d1a 100%); }
+    .pillar-card:nth-child(1)::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 70%, rgba(0,180,255,0.1), transparent 60%); z-index: 0; }
+    .pillar-card:nth-child(2)::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(123,47,255,0.12), transparent 60%); z-index: 0; }
+    .pillar-card:nth-child(3)::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(57,255,20,0.07), transparent 60%); z-index: 0; }
+    .pillar-card:nth-child(4)::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 70%, rgba(255,0,128,0.08), transparent 60%); z-index: 0; }
+
+    /* Testimonials / Members */
+    .members-section { background: var(--bg2); }
+    .members-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none; }
+    .members-scroll::-webkit-scrollbar { display: none; }
+    .member-card {
+      background: var(--glass); border: 1px solid var(--glass-b);
+      border-radius: var(--radius); padding: 24px 22px;
+      min-width: 260px; scroll-snap-align: start;
+      flex-shrink: 0; transition: var(--trans);
+    }
+    .member-card:hover { border-color: rgba(0,255,231,0.3); transform: translateY(-3px); }
+    .member-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-weight: 900; font-size: 1rem; color: var(--bg);
+      margin-bottom: 14px;
+    }
+    .member-name   { font-family: var(--font-head); font-size: 0.85rem; color: #fff; font-weight: 700; }
+    .member-role   { font-size: 11px; color: var(--neon); letter-spacing: 0.1em; margin-bottom: 12px; }
+    .member-quote  { font-size: 0.82rem; color: var(--text-dim); line-height: 1.7; font-style: italic; }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg), var(--bg2));
+      padding: 120px clamp(20px,6vw,100px);
+    }
+    .cta-section .section-title { font-size: clamp(2rem,5vw,4rem); }
+    .cta-section .section-sub   { margin: 0 auto 48px; max-width: 560px; }
+    .cta-glow-box {
+      display: inline-block; position: relative;
+    }
+    .cta-glow-box::before {
+      content: '';
+      position: absolute; inset: -30px;
+      background: radial-gradient(circle, rgba(0,255,231,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-logo glitch" data-text="GEEK ROOM">GEEK ROOM</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div class="loader-text">INITIALIZING SYSTEM...</div>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- BG CANVAS -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-bracket">[</span>GEEK<span>&nbsp;ROOM</span><span class="logo-bracket">]</span>
+    </a>
+    <button class="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links">
+      <a href="index.html"   class="active">Home</a>
+      <a href="events.html">Events</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-cta">Login</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero">
+      <div class="hero-glow-1" data-parallax="0.15"></div>
+      <div class="hero-glow-2" data-parallax="0.1"></div>
+      <div class="hero-glow-3"></div>
+
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        BPIT's Premier Tech Society &nbsp;·&nbsp; Est. 2018
+      </div>
+
+      <h1 class="hero-title">
+        <span class="line-neon glitch" data-text="GEEK ROOM">GEEK ROOM</span><br>
+        <span style="color:#fff; font-size: 0.6em; letter-spacing: 0.05em;">WHERE INNOVATION</span><br>
+        <span class="line-neon2" style="font-size:0.6em;">MEETS CODE.</span>
+      </h1>
+
+      <p class="hero-sub">
+        A community of <span style="color:var(--neon)">builders, hackers, and creators</span>
+        pushing the limits of technology — one commit at a time.
+        <span data-typed="We build. We break. We innovate.|Code is our language.|The future is open source."></span>
+        <span style="color:var(--neon); animation: blink 1s step-end infinite;">█</span>
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="contact.html" class="btn-primary">
+          <span>⚡</span> Join the Community
+        </a>
+        <a href="events.html" class="btn-secondary">
+          <span>📅</span> Explore Events
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat reveal">
+          <div class="hero-stat-num" data-count="500" data-suffix="+">0+</div>
+          <div class="hero-stat-label">Members</div>
+        </div>
+        <div class="hero-stat reveal reveal-delay-1">
+          <div class="hero-stat-num" data-count="60" data-suffix="+">0+</div>
+          <div class="hero-stat-label">Events Held</div>
+        </div>
+        <div class="hero-stat reveal reveal-delay-2">
+          <div class="hero-stat-num" data-count="28" data-suffix="">0</div>
+          <div class="hero-stat-label">Hackathons Won</div>
+        </div>
+        <div class="hero-stat reveal reveal-delay-3">
+          <div class="hero-stat-num" data-count="15" data-suffix="+">0+</div>
+          <div class="hero-stat-label">Industry Partners</div>
+        </div>
+      </div>
+
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ MARQUEE ═══════════════════ -->
+    <div class="marquee-section">
+      <div class="marquee-track">
+        <div class="marquee-inner">
+          <span class="marquee-item"><span class="dot">◆</span>Python</span>
+          <span class="marquee-item"><span class="dot">◆</span>Machine Learning</span>
+          <span class="marquee-item"><span class="dot">◆</span>Web Development</span>
+          <span class="marquee-item"><span class="dot">◆</span>Blockchain</span>
+          <span class="marquee-item"><span class="dot">◆</span>Cloud Computing</span>
+          <span class="marquee-item"><span class="dot">◆</span>Cybersecurity</span>
+          <span class="marquee-item"><span class="dot">◆</span>Open Source</span>
+          <span class="marquee-item"><span class="dot">◆</span>Competitive Coding</span>
+          <span class="marquee-item"><span class="dot">◆</span>AR/VR</span>
+          <span class="marquee-item"><span class="dot">◆</span>DevOps</span>
+          <span class="marquee-item"><span class="dot">◆</span>Hackathons</span>
+          <span class="marquee-item"><span class="dot">◆</span>React</span>
+          <span class="marquee-item"><span class="dot">◆</span>Docker</span>
+          <span class="marquee-item"><span class="dot">◆</span>Kubernetes</span>
+          <span class="marquee-item"><span class="dot">◆</span>Python</span>
+          <span class="marquee-item"><span class="dot">◆</span>Machine Learning</span>
+          <span class="marquee-item"><span class="dot">◆</span>Web Development</span>
+          <span class="marquee-item"><span class="dot">◆</span>Blockchain</span>
+          <span class="marquee-item"><span class="dot">◆</span>Cloud Computing</span>
+          <span class="marquee-item"><span class="dot">◆</span>Cybersecurity</span>
+          <span class="marquee-item"><span class="dot">◆</span>Open Source</span>
+          <span class="marquee-item"><span class="dot">◆</span>Competitive Coding</span>
+          <span class="marquee-item"><span class="dot">◆</span>AR/VR</span>
+          <span class="marquee-item"><span class="dot">◆</span>DevOps</span>
+          <span class="marquee-item"><span class="dot">◆</span>Hackathons</span>
+          <span class="marquee-item"><span class="dot">◆</span>React</span>
+          <span class="marquee-item"><span class="dot">◆</span>Docker</span>
+          <span class="marquee-item"><span class="dot">◆</span>Kubernetes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ ABOUT ═══════════════════ -->
+    <section class="about-section" style="padding: 100px clamp(20px,6vw,100px);">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="about-code-block">
+            <div class="code-bar">
+              <span class="code-dot r"></span>
+              <span class="code-dot y"></span>
+              <span class="code-dot g"></span>
+              <span class="code-title">geekroom.js</span>
+            </div>
+            <div class="code-body">
+              <span class="c-cm">// Who we are</span><br>
+              <span class="c-kw">const</span> <span class="c-fn">GeekRoom</span> = {<br>
+              &nbsp;&nbsp;<span class="c-str">name</span>: <span class="c-str">"Geek Room"</span>,<br>
+              &nbsp;&nbsp;<span class="c-str">founded</span>: <span class="c-num">2018</span>,<br>
+              &nbsp;&nbsp;<span class="c-str">members</span>: <span class="c-num">500</span>,<br>
+              &nbsp;&nbsp;<span class="c-str">mission</span>: <span class="c-str">"Innovate. Build. Inspire."</span>,<br>
+              &nbsp;&nbsp;<span class="c-str">skills</span>: [<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"Python"</span>, <span class="c-str">"Web Dev"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"ML"</span>, <span class="c-str">"Blockchain"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"Cloud"</span>, <span class="c-str">"Security"</span><br>
+              &nbsp;&nbsp;],<br>
+              &nbsp;&nbsp;<span class="c-fn">joinUs</span>: <span class="c-kw">async</span> () => {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">await</span> <span class="c-fn">learnTogether</span>();<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">"🚀 LAUNCHED"</span>;<br>
+              &nbsp;&nbsp;}<br>
+              };<br><br>
+              <span class="c-cm">// Access granted ✓</span><br>
+              <span class="c-fn">GeekRoom</span>.<span class="c-fn">joinUs</span>()<br>
+              &nbsp;&nbsp;.<span class="c-fn">then</span>(msg => <span class="c-neon">console</span>.<span class="c-fn">log</span>(msg));
+            </div>
+          </div>
+        </div>
+        <div class="about-text reveal reveal-delay-1">
+          <span class="section-label">// ABOUT US</span>
+          <h2>Turning <span style="color:var(--neon)">passion</span> into<br>production-ready code</h2>
+          <p>Geek Room is BPIT's flagship technical society — a breeding ground for engineers who don't just learn to code, but build things that matter. Since 2018, we've fostered a culture where curiosity drives creation.</p>
+          <p>From midnight hackathons to cutting-edge workshops, we create spaces where students transform from learners to innovators.</p>
+          <div class="about-list">
+            <div class="about-list-item">Weekly coding challenges &amp; DSA sessions</div>
+            <div class="about-list-item">Industry mentorship &amp; placement support</div>
+            <div class="about-list-item">Open-source project contributions</div>
+            <div class="about-list-item">National &amp; international hackathon exposure</div>
+          </div>
+          <div style="margin-top: 36px;">
+            <a href="contact.html" class="btn-primary">Get Involved →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ FEATURES ═══════════════════ -->
+    <section class="features-section">
+      <div class="section-center">
+        <span class="section-label reveal">// WHAT WE DO</span>
+        <h2 class="section-title reveal reveal-delay-1">Everything you need to <span class="hl">level up</span></h2>
+        <p class="section-sub reveal reveal-delay-2">From beginner bootcamps to advanced R&amp;D projects — we cover the full stack of growth.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">HACKATHONS</div>
+          <p class="feature-desc">48-hour build sprints with real problems, real stakes, and real prizes. Participate, compete, and ship products under pressure.</p>
+          <div class="feature-card-accent"></div>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">🛠️</div>
+          <div class="feature-title">WORKSHOPS</div>
+          <p class="feature-desc">Hands-on deep dives into AI/ML, Web3, Cybersecurity, and Cloud. Learn from practitioners, not just professors.</p>
+          <div class="feature-card-accent"></div>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">🎙️</div>
+          <div class="feature-title">TECH TALKS</div>
+          <p class="feature-desc">Fireside chats and keynotes with engineers from Google, Microsoft, and fast-growing startups. Real insights, zero fluff.</p>
+          <div class="feature-card-accent"></div>
+        </div>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">COMMUNITY</div>
+          <p class="feature-desc">Join a 500+ member network of developers, designers, and data scientists. Build together, grow together, ship together.</p>
+          <div class="feature-card-accent"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ PILLARS ═══════════════════ -->
+    <section class="pillars-section" style="padding: 100px clamp(20px,6vw,100px);">
+      <div class="section-center">
+        <span class="section-label reveal">// OUR PILLARS</span>
+        <h2 class="section-title reveal reveal-delay-1">Built on <span class="hl">four</span> pillars</h2>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card reveal">
+          <div class="pillar-bg"></div>
+          <div class="pillar-overlay"></div>
+          <div class="pillar-content">
+            <div class="pillar-icon">⚡</div>
+            <div class="pillar-title">HACKATHONS</div>
+            <p class="pillar-desc">Compete at national &amp; international levels. Build MVPs in 24-48 hours.</p>
+          </div>
+        </div>
+        <div class="pillar-card reveal reveal-delay-1">
+          <div class="pillar-bg"></div>
+          <div class="pillar-overlay"></div>
+          <div class="pillar-content">
+            <div class="pillar-icon">🧪</div>
+            <div class="pillar-title">WORKSHOPS</div>
+            <p class="pillar-desc">Expert-led technical workshops on the hottest domains in tech.</p>
+          </div>
+        </div>
+        <div class="pillar-card reveal reveal-delay-2">
+          <div class="pillar-bg"></div>
+          <div class="pillar-overlay"></div>
+          <div class="pillar-content">
+            <div class="pillar-icon">🎙️</div>
+            <div class="pillar-title">TECH TALKS</div>
+            <p class="pillar-desc">Conversations with industry leaders that change how you think about tech.</p>
+          </div>
+        </div>
+        <div class="pillar-card reveal reveal-delay-3">
+          <div class="pillar-bg"></div>
+          <div class="pillar-overlay"></div>
+          <div class="pillar-content">
+            <div class="pillar-icon">🤝</div>
+            <div class="pillar-title">COMMUNITY</div>
+            <p class="pillar-desc">A tight-knit family of builders who support, mentor, and collaborate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ MEMBERS ═══════════════════ -->
+    <section class="members-section" style="padding: 100px clamp(20px,6vw,100px);">
+      <span class="section-label reveal">// VOICES FROM THE ROOM</span>
+      <h2 class="section-title reveal reveal-delay-1">What our members say</h2>
+      <div class="members-scroll" style="margin-top:40px;">
+        <div class="member-card">
+          <div class="member-avatar">RS</div>
+          <div class="member-name">Rahul Sharma</div>
+          <div class="member-role">// SDE @ Microsoft</div>
+          <div class="member-quote">"Geek Room taught me more in 6 months than my entire first year of college. The hackathon culture here is unmatched."</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:linear-gradient(135deg,var(--neon2),var(--accent2))">PG</div>
+          <div class="member-name">Priya Gupta</div>
+          <div class="member-role">// ML Engineer @ Google</div>
+          <div class="member-quote">"The ML workshops at Geek Room gave me the foundations I needed to land my dream internship. Forever grateful."</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">AK</div>
+          <div class="member-name">Arjun Kumar</div>
+          <div class="member-role">// Founder @ TechStartup</div>
+          <div class="member-quote">"My co-founders? Met them at a Geek Room hackathon. Our startup wouldn't exist without this community."</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:linear-gradient(135deg,var(--green),var(--neon))">SM</div>
+          <div class="member-name">Sneha Mehra</div>
+          <div class="member-role">// Backend Dev @ Razorpay</div>
+          <div class="member-quote">"From attending my first workshop to leading the backend team — Geek Room accelerated my growth exponentially."</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:linear-gradient(135deg,var(--neon2),var(--green))">VT</div>
+          <div class="member-name">Vikram Thakur</div>
+          <div class="member-role">// Security Researcher</div>
+          <div class="member-quote">"The cybersecurity sessions opened a whole new world for me. Geek Room is where I found my passion for ethical hacking."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ CTA ═══════════════════ -->
+    <section class="cta-section">
+      <span class="section-label reveal">// READY TO BUILD?</span>
+      <h2 class="section-title reveal reveal-delay-1">
+        The future is <span class="hl">open source</span>.<br>Are you in?
+      </h2>
+      <p class="section-sub reveal reveal-delay-2">Stop watching others build. Join Geek Room and start shipping products that matter.</p>
+      <div class="cta-glow-box reveal reveal-delay-3">
+        <a href="contact.html" class="btn-primary" style="font-size:1rem; padding:18px 48px;">
+          ⚡ Join the Community
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-text">[GEEK ROOM]</div>
+        <p class="footer-brand-desc">BPIT's premier technical society. Building the next generation of innovators, one line of code at a time.</p>
+        <div class="footer-socials" style="margin-top:24px;">
+          <a href="#" title="GitHub">⌘</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Instagram">◉</a>
+          <a href="#" title="Twitter">✕</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Programs</div>
+        <div class="footer-links">
+          <a href="#">Hackathons</a>
+          <a href="#">Workshops</a>
+          <a href="#">Tech Talks</a>
+          <a href="#">Open Source</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="login.html">Member Login</a>
+          <a href="contact.html">Get in Touch</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">[GEEK ROOM] © 2024</span>
+      <span>Made with ❤️ + ☕ by Geek Room Dev Team</span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — Geek Room</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero {
+      padding-top: calc(var(--nav-h) + 100px);
+      padding-bottom: 80px;
+      padding-left: clamp(20px,6vw,100px);
+      padding-right: clamp(20px,6vw,100px);
+      position: relative;
+    }
+    .page-hero-glow {
+      position: absolute; top: 0; right: 0;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,255,231,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: -1;
+    }
+    .events-section { padding: 0 clamp(20px,6vw,100px) 100px; }
+    .event-tag.workshop  { background: rgba(123,47,255,0.12); border-color: rgba(123,47,255,0.4); color: #c792ea; }
+    .event-tag.talk      { background: rgba(255,0,128,0.10); border-color: rgba(255,0,128,0.35); color: #ff80c0; }
+    .event-tag.hackathon { background: rgba(0,180,255,0.10); border-color: rgba(0,180,255,0.35); color: var(--neon2); }
+    .event-tag.community { background: rgba(57,255,20,0.08); border-color: rgba(57,255,20,0.3); color: var(--green); }
+
+    .event-card-featured {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(0,255,231,0.06) 0%, rgba(0,180,255,0.04) 100%);
+      border-color: rgba(0,255,231,0.2);
+    }
+    .event-card-featured .event-name { font-size: 1.3rem; }
+    .featured-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: linear-gradient(135deg, var(--neon), var(--neon2));
+      color: var(--bg); font-size: 10px; font-weight: 800;
+      letter-spacing: 0.2em; padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .event-meta {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      font-size: 12px; color: var(--text-dim);
+    }
+    .event-meta-item { display: flex; align-items: center; gap: 6px; }
+
+    /* Countdown timer */
+    .event-countdown {
+      display: flex; gap: 12px; margin-top: 8px;
+    }
+    .countdown-unit {
+      display: flex; flex-direction: column; align-items: center;
+      background: rgba(0,255,231,0.06);
+      border: 1px solid rgba(0,255,231,0.15);
+      border-radius: 8px; padding: 8px 12px;
+      min-width: 52px;
+    }
+    .countdown-num {
+      font-family: var(--font-head); font-size: 1.2rem;
+      font-weight: 900; color: var(--neon);
+      text-shadow: 0 0 10px rgba(0,255,231,0.4);
+    }
+    .countdown-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; margin-top: 2px; }
+
+    /* Past events */
+    .past-section { background: var(--bg2); padding: 80px clamp(20px,6vw,100px); }
+
+    @media (max-width: 700px) {
+      .event-card-featured { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-logo">EVENTS</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div class="loader-text">LOADING SCHEDULE...</div>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-bracket">[</span>GEEK<span>&nbsp;ROOM</span><span class="logo-bracket">]</span>
+    </a>
+    <button class="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="events.html" class="active">Events</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-cta">Login</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ═══ PAGE HERO ═══ -->
+    <div class="page-hero">
+      <div class="page-hero-glow"></div>
+      <span class="section-label reveal">// EVENTS &amp; PROGRAMS</span>
+      <h1 class="section-title reveal reveal-delay-1">Where <span class="hl">ideas</span><br>become reality</h1>
+      <p class="section-sub reveal reveal-delay-2">Hackathons, workshops, tech talks and more — curated experiences that push your limits and expand your network.</p>
+    </div>
+
+    <!-- ═══ UPCOMING EVENTS ═══ -->
+    <section class="events-section">
+      <div class="events-section-title reveal">⚡ UPCOMING EVENTS</div>
+      <div class="events-grid">
+
+        <!-- Featured Event -->
+        <div class="event-card event-card-featured reveal">
+          <span class="featured-badge">FEATURED</span>
+          <div class="event-card-corner"></div>
+          <div class="event-tag hackathon">Hackathon</div>
+          <div class="event-name">HackBPIT 2024 — 48-Hour Innovation Sprint</div>
+          <div class="event-meta">
+            <span class="event-meta-item">📅 December 20–22, 2024</span>
+            <span class="event-meta-item">📍 BPIT Auditorium, Delhi</span>
+            <span class="event-meta-item">👥 300+ Participants</span>
+            <span class="event-meta-item">🏆 ₹1,50,000 Prize Pool</span>
+          </div>
+          <p class="event-desc">Our flagship 48-hour hackathon returns! Build solutions in AI/ML, Web3, HealthTech, or FinTech. Open to all colleges. Form teams of 2–4, register now, and compete for massive prizes plus industry mentorship.</p>
+          <div>
+            <div style="font-size:11px; color:var(--text-dim); letter-spacing:0.1em; margin-bottom:10px;">⏳ REGISTRATION CLOSES IN</div>
+            <div class="event-countdown" id="countdown-main"></div>
+          </div>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">⚡ Register Now</a>
+            <span class="event-slots" style="color:var(--neon)">🔴 72 spots left</span>
+          </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="event-card reveal reveal-delay-1">
+          <div class="event-card-corner"></div>
+          <div class="event-tag workshop">Workshop</div>
+          <div class="event-name">Full-Stack AI Apps with LangChain</div>
+          <div class="event-date">📅 November 30, 2024 &nbsp;·&nbsp; 10 AM – 4 PM</div>
+          <p class="event-desc">Build production-grade AI applications using LangChain, Pinecone, and OpenAI APIs. Hands-on coding session — bring your laptop.</p>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">Register</a>
+            <span class="event-slots">48 seats · 22 left</span>
+          </div>
+        </div>
+
+        <!-- Event 3 -->
+        <div class="event-card reveal reveal-delay-2">
+          <div class="event-card-corner"></div>
+          <div class="event-tag talk">Tech Talk</div>
+          <div class="event-name">Building at Scale — Engineering at Google</div>
+          <div class="event-date">📅 December 5, 2024 &nbsp;·&nbsp; 6 PM – 8 PM</div>
+          <p class="event-desc">A fireside chat with a senior engineer from Google India discussing distributed systems, engineering culture, and career paths.</p>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">Register</a>
+            <span class="event-slots">Open seating</span>
+          </div>
+        </div>
+
+        <!-- Event 4 -->
+        <div class="event-card reveal">
+          <div class="event-card-corner"></div>
+          <div class="event-tag community">Community</div>
+          <div class="event-name">Open Source Saturday — December Edition</div>
+          <div class="event-date">📅 December 7, 2024 &nbsp;·&nbsp; 2 PM – 7 PM</div>
+          <p class="event-desc">Monthly open-source contribution day. Find good-first-issues, get peer code reviews, and make your first PR to a real project.</p>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">Register</a>
+            <span class="event-slots">Free entry</span>
+          </div>
+        </div>
+
+        <!-- Event 5 -->
+        <div class="event-card reveal reveal-delay-1">
+          <div class="event-card-corner"></div>
+          <div class="event-tag workshop">Workshop</div>
+          <div class="event-name">Kubernetes &amp; Docker: Container Mastery</div>
+          <div class="event-date">📅 December 12, 2024 &nbsp;·&nbsp; 11 AM – 5 PM</div>
+          <p class="event-desc">From zero to deploying containerised applications on a local Kubernetes cluster. Includes hands-on labs with real workloads.</p>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">Register</a>
+            <span class="event-slots">40 seats · 15 left</span>
+          </div>
+        </div>
+
+        <!-- Event 6 -->
+        <div class="event-card reveal reveal-delay-2">
+          <div class="event-card-corner"></div>
+          <div class="event-tag" style="background:rgba(255,189,46,0.1);border-color:rgba(255,189,46,0.4);color:#ffbd2e;">Bootcamp</div>
+          <div class="event-name">Winter DSA Bootcamp 2024</div>
+          <div class="event-date">📅 Dec 15 – Jan 15 &nbsp;·&nbsp; Daily 7–9 PM</div>
+          <p class="event-desc">30-day intensive Data Structures &amp; Algorithms program. Covers arrays to graphs, with daily problem sheets and weekly mock interviews.</p>
+          <div class="event-footer">
+            <a href="contact.html" class="btn-register">Register</a>
+            <span class="event-slots">100 seats · 34 left</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ PAST EVENTS ═══ -->
+    <section class="past-section">
+      <div class="events-section-title reveal">🕹️ PAST EVENTS</div>
+      <div class="events-grid">
+
+        <div class="event-card reveal">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">HackBPIT 2023</div>
+          <p class="event-desc">Our biggest hackathon to date — 200+ participants, 12 project tracks, and groundbreaking builds in AI &amp; HealthTech.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+        <div class="event-card reveal reveal-delay-1">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">Web3 Deep Dive — Ethereum Development</div>
+          <p class="event-desc">A 3-day intensive workshop on Solidity smart contracts, DeFi protocols, and decentralised app architecture.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+        <div class="event-card reveal reveal-delay-2">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">ML Bootcamp — Summer 2023</div>
+          <p class="event-desc">6-week deep dive from linear regression to transformer fine-tuning. 80 graduates, 12 deployed models.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+        <div class="event-card reveal">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">DevFest BPIT 2023 — GDG Collaboration</div>
+          <p class="event-desc">A full-day Google Developer Fest featuring talks, workshops, and product showcases with GDG Delhi Cloud.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+        <div class="event-card reveal reveal-delay-1">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">CTF — Capture The Flag Competition</div>
+          <p class="event-desc">An intense cybersecurity competition with 15 challenges across forensics, reverse engineering, and web exploitation.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+        <div class="event-card reveal reveal-delay-2">
+          <div class="event-tag past">Past</div>
+          <div class="event-name">Startup Pitchfest 2023</div>
+          <p class="event-desc">Student entrepreneurs pitched ideas to a panel of VCs and founders. ₹50K in grants distributed to top 3 ideas.</p>
+          <div class="event-footer">
+            <a href="gallery.html" class="btn-gallery-link">📷 View Photos →</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-text">[GEEK ROOM]</div>
+        <p class="footer-brand-desc">BPIT's premier technical society. Building the next generation of innovators, one line of code at a time.</p>
+        <div class="footer-socials" style="margin-top:24px;">
+          <a href="#" title="GitHub">⌘</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Instagram">◉</a>
+          <a href="#" title="Twitter">✕</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Programs</div>
+        <div class="footer-links">
+          <a href="#">Hackathons</a>
+          <a href="#">Workshops</a>
+          <a href="#">Tech Talks</a>
+          <a href="#">Open Source</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="login.html">Member Login</a>
+          <a href="contact.html">Get in Touch</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">[GEEK ROOM] © 2024</span>
+      <span>Made with ❤️ + ☕ by Geek Room Dev Team</span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    // Countdown timer for featured event
+    function updateCountdown() {
+      const target = new Date('2024-12-20T09:00:00').getTime();
+      const now    = Date.now();
+      const diff   = Math.max(0, target - now);
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      const el = document.getElementById('countdown-main');
+      if (!el) return;
+      el.innerHTML = [
+        ['DAYS', d], ['HRS', h], ['MIN', m], ['SEC', s]
+      ].map(([l, v]) => `
+        <div class="countdown-unit">
+          <span class="countdown-num">${String(v).padStart(2,'0')}</span>
+          <span class="countdown-label">${l}</span>
+        </div>`).join('');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>

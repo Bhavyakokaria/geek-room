@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Geek Room</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero {
+      padding-top: calc(var(--nav-h) + 100px);
+      padding-bottom: 60px;
+      padding-left: clamp(20px,6vw,100px);
+      padding-right: clamp(20px,6vw,100px);
+      text-align: center;
+    }
+    /* SVG placeholder photos */
+    .gallery-item img { background: var(--bg3); min-height: 180px; }
+    .gallery-item[data-cat="hackathon"] { --accent-c: #00b4ff; }
+    .gallery-item[data-cat="workshop"]  { --accent-c: #c792ea; }
+    .gallery-item[data-cat="talk"]      { --accent-c: #ff80c0; }
+    .gallery-item[data-cat="community"] { --accent-c: #39ff14; }
+
+    /* Photo grid using colored SVG data URIs as placeholders */
+    .gph { width: 100%; display: block; border-radius: 0; }
+  </style>
+</head>
+<body>
+
+  <div id="page-loader">
+    <div class="loader-logo">GALLERY</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div class="loader-text">LOADING MEMORIES...</div>
+  </div>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <nav class="navbar scrolled">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-bracket">[</span>GEEK<span>&nbsp;ROOM</span><span class="logo-bracket">]</span>
+    </a>
+    <button class="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="gallery.html" class="active">Gallery</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-cta">Login</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <div class="page-hero">
+      <span class="section-label reveal">// GALLERY</span>
+      <h1 class="section-title reveal reveal-delay-1">Moments that <span class="hl">define</span> us</h1>
+      <p class="section-sub reveal reveal-delay-2" style="margin:0 auto 0;">Late nights, breakthrough builds, community bonds — captured in pixels.</p>
+    </div>
+
+    <section class="gallery-section">
+      <!-- Filters -->
+      <div class="gallery-filters reveal">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="hackathon">Hackathons</button>
+        <button class="filter-btn" data-cat="workshop">Workshops</button>
+        <button class="filter-btn" data-cat="talk">Tech Talks</button>
+        <button class="filter-btn" data-cat="community">Community</button>
+      </div>
+
+      <!-- Gallery Grid — Using inline SVG as placeholder images -->
+      <div class="gallery-grid">
+
+        <div class="gallery-item" data-cat="hackathon">
+          <svg class="gph" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#060d17"/>
+            <rect x="0" y="0" width="400" height="300" fill="url(#gh1)"/>
+            <defs>
+              <radialGradient id="gh1" cx="30%" cy="40%">
+                <stop offset="0%" stop-color="#003d5c" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#060d17"/>
+              </radialGradient>
+            </defs>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="42" fill="#00ffe7" opacity="0.6">⚡</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#00b4ff" opacity="0.8" letter-spacing="3">HackBPIT 2024</text>
+            <text x="50%" y="76%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Opening Ceremony</text>
+            <!-- decorative dots -->
+            <circle cx="20" cy="20" r="2" fill="#00ffe7" opacity="0.4"/>
+            <circle cx="380" cy="20" r="2" fill="#00ffe7" opacity="0.4"/>
+            <circle cx="20" cy="280" r="2" fill="#00ffe7" opacity="0.4"/>
+            <circle cx="380" cy="280" r="2" fill="#00ffe7" opacity="0.4"/>
+            <rect x="0" y="0" width="400" height="1" fill="url(#gl1)" opacity="0.3"/>
+            <defs><linearGradient id="gl1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="50%" stop-color="#00ffe7"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">HackBPIT 2024</div>
+            <div class="gallery-item-tag">// hackathon</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="workshop">
+          <svg class="gph" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="260" fill="#07030f"/>
+            <radialGradient id="gw1" cx="70%" cy="30%"><stop offset="0%" stop-color="#1a0a2e" stop-opacity="0.9"/><stop offset="100%" stop-color="#07030f"/></radialGradient>
+            <rect width="400" height="260" fill="url(#gw1)"/>
+            <text x="50%" y="44%" text-anchor="middle" font-family="monospace" font-size="38" fill="#c792ea" opacity="0.65">🛠️</text>
+            <text x="50%" y="64%" text-anchor="middle" font-family="monospace" font-size="13" fill="#c792ea" opacity="0.8" letter-spacing="2">AI Workshop</text>
+            <text x="50%" y="78%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">LangChain Session</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">AI/ML Workshop</div>
+            <div class="gallery-item-tag">// workshop</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="community">
+          <svg class="gph" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="380" fill="#030a08"/>
+            <radialGradient id="gc1" cx="40%" cy="60%"><stop offset="0%" stop-color="#0a2e1a" stop-opacity="0.9"/><stop offset="100%" stop-color="#030a08"/></radialGradient>
+            <rect width="400" height="380" fill="url(#gc1)"/>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="48" fill="#39ff14" opacity="0.55">🤝</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#39ff14" opacity="0.8" letter-spacing="2">Team Geek Room</text>
+            <text x="50%" y="75%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Annual Meet 2024</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Annual Team Meet</div>
+            <div class="gallery-item-tag">// community</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="talk">
+          <svg class="gph" viewBox="0 0 400 290" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="290" fill="#0f0309"/>
+            <radialGradient id="gt1" cx="50%" cy="50%"><stop offset="0%" stop-color="#2e0a1a" stop-opacity="0.8"/><stop offset="100%" stop-color="#0f0309"/></radialGradient>
+            <rect width="400" height="290" fill="url(#gt1)"/>
+            <text x="50%" y="43%" text-anchor="middle" font-family="monospace" font-size="42" fill="#ff80c0" opacity="0.6">🎙️</text>
+            <text x="50%" y="63%" text-anchor="middle" font-family="monospace" font-size="13" fill="#ff80c0" opacity="0.8" letter-spacing="2">Google Tech Talk</text>
+            <text x="50%" y="77%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Speaker Series 2024</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Google Tech Talk</div>
+            <div class="gallery-item-tag">// tech talk</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="hackathon">
+          <svg class="gph" viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="330" fill="#04090f"/>
+            <radialGradient id="gh2" cx="60%" cy="40%"><stop offset="0%" stop-color="#001a33" stop-opacity="0.9"/><stop offset="100%" stop-color="#04090f"/></radialGradient>
+            <rect width="400" height="330" fill="url(#gh2)"/>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="44" fill="#00b4ff" opacity="0.6">🏆</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#00b4ff" opacity="0.8" letter-spacing="2">Winners — 2023</text>
+            <text x="50%" y="76%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Prize Distribution</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Hackathon Winners</div>
+            <div class="gallery-item-tag">// hackathon</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="workshop">
+          <svg class="gph" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="280" fill="#060411"/>
+            <radialGradient id="gw2" cx="50%" cy="50%"><stop offset="0%" stop-color="#12062b" stop-opacity="0.9"/><stop offset="100%" stop-color="#060411"/></radialGradient>
+            <rect width="400" height="280" fill="url(#gw2)"/>
+            <text x="50%" y="44%" text-anchor="middle" font-family="monospace" font-size="40" fill="#7b2fff" opacity="0.7">☁️</text>
+            <text x="50%" y="64%" text-anchor="middle" font-family="monospace" font-size="13" fill="#7b2fff" opacity="0.8" letter-spacing="2">Cloud Workshop</text>
+            <text x="50%" y="78%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">AWS + Kubernetes</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Cloud Workshop</div>
+            <div class="gallery-item-tag">// workshop</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="community">
+          <svg class="gph" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="340" fill="#030a05"/>
+            <radialGradient id="gc2" cx="30%" cy="70%"><stop offset="0%" stop-color="#0a2e10" stop-opacity="0.9"/><stop offset="100%" stop-color="#030a05"/></radialGradient>
+            <rect width="400" height="340" fill="url(#gc2)"/>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="44" fill="#39ff14" opacity="0.55">🌱</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#39ff14" opacity="0.8" letter-spacing="2">Open Source Day</text>
+            <text x="50%" y="76%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">October 2024</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Open Source Day</div>
+            <div class="gallery-item-tag">// community</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="hackathon">
+          <svg class="gph" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="260" fill="#030c12"/>
+            <radialGradient id="gh3" cx="70%" cy="30%"><stop offset="0%" stop-color="#003344" stop-opacity="0.8"/><stop offset="100%" stop-color="#030c12"/></radialGradient>
+            <rect width="400" height="260" fill="url(#gh3)"/>
+            <text x="50%" y="43%" text-anchor="middle" font-family="monospace" font-size="40" fill="#00ffe7" opacity="0.6">💻</text>
+            <text x="50%" y="64%" text-anchor="middle" font-family="monospace" font-size="13" fill="#00ffe7" opacity="0.8" letter-spacing="2">Midnight Coding</text>
+            <text x="50%" y="78%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">HackBPIT — Night 1</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Midnight Session</div>
+            <div class="gallery-item-tag">// hackathon</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="talk">
+          <svg class="gph" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="320" fill="#0f0309"/>
+            <radialGradient id="gt2" cx="50%" cy="40%"><stop offset="0%" stop-color="#2e0a1a" stop-opacity="0.7"/><stop offset="100%" stop-color="#0f0309"/></radialGradient>
+            <rect width="400" height="320" fill="url(#gt2)"/>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="42" fill="#ff80c0" opacity="0.6">🔒</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#ff80c0" opacity="0.8" letter-spacing="2">CTF Challenge</text>
+            <text x="50%" y="76%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Cybersecurity 2024</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">CTF Competition</div>
+            <div class="gallery-item-tag">// security</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="community">
+          <svg class="gph" viewBox="0 0 400 290" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="290" fill="#05080f"/>
+            <radialGradient id="gc3" cx="50%" cy="50%"><stop offset="0%" stop-color="#0a1628" stop-opacity="0.9"/><stop offset="100%" stop-color="#05080f"/></radialGradient>
+            <rect width="400" height="290" fill="url(#gc3)"/>
+            <text x="50%" y="43%" text-anchor="middle" font-family="monospace" font-size="42" fill="#00b4ff" opacity="0.6">🎓</text>
+            <text x="50%" y="63%" text-anchor="middle" font-family="monospace" font-size="13" fill="#00b4ff" opacity="0.8" letter-spacing="2">Induction 2024</text>
+            <text x="50%" y="77%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">New Member Ceremony</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">New Member Induction</div>
+            <div class="gallery-item-tag">// community</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="workshop">
+          <svg class="gph" viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="350" fill="#07030f"/>
+            <radialGradient id="gw3" cx="60%" cy="60%"><stop offset="0%" stop-color="#1a0a2e" stop-opacity="0.8"/><stop offset="100%" stop-color="#07030f"/></radialGradient>
+            <rect width="400" height="350" fill="url(#gw3)"/>
+            <text x="50%" y="42%" text-anchor="middle" font-family="monospace" font-size="44" fill="#c792ea" opacity="0.65">🤖</text>
+            <text x="50%" y="62%" text-anchor="middle" font-family="monospace" font-size="13" fill="#c792ea" opacity="0.8" letter-spacing="2">ML Bootcamp</text>
+            <text x="50%" y="76%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Summer 2023</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">ML Bootcamp</div>
+            <div class="gallery-item-tag">// workshop</div>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-cat="hackathon">
+          <svg class="gph" viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="270" fill="#04090f"/>
+            <radialGradient id="gh4" cx="40%" cy="40%"><stop offset="0%" stop-color="#001833" stop-opacity="0.9"/><stop offset="100%" stop-color="#04090f"/></radialGradient>
+            <rect width="400" height="270" fill="url(#gh4)"/>
+            <text x="50%" y="43%" text-anchor="middle" font-family="monospace" font-size="42" fill="#00ffe7" opacity="0.6">🚀</text>
+            <text x="50%" y="63%" text-anchor="middle" font-family="monospace" font-size="13" fill="#00ffe7" opacity="0.8" letter-spacing="2">Demo Day</text>
+            <text x="50%" y="77%" text-anchor="middle" font-family="monospace" font-size="10" fill="#5a7a9a">Project Showcase</text>
+          </svg>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-title">Demo Day 2024</div>
+            <div class="gallery-item-tag">// showcase</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox">
+    <button class="lightbox-close">✕</button>
+    <button class="lightbox-nav lightbox-prev">‹</button>
+    <img src="" alt="" />
+    <button class="lightbox-nav lightbox-next">›</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-text">[GEEK ROOM]</div>
+        <p class="footer-brand-desc">BPIT's premier technical society. Building the next generation of innovators, one line of code at a time.</p>
+        <div class="footer-socials" style="margin-top:24px;">
+          <a href="#" title="GitHub">⌘</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Instagram">◉</a>
+          <a href="#" title="Twitter">✕</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Programs</div>
+        <div class="footer-links">
+          <a href="#">Hackathons</a>
+          <a href="#">Workshops</a>
+          <a href="#">Tech Talks</a>
+          <a href="#">Open Source</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="login.html">Member Login</a>
+          <a href="contact.html">Get in Touch</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">[GEEK ROOM] © 2024</span>
+      <span>Made with ❤️ + ☕ by Geek Room Dev Team</span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
